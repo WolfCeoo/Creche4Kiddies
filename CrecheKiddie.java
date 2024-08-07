@@ -160,11 +160,11 @@ public class CrecheKiddie extends JFrame{
                 namTextField.setText("");
                 if(maleRadioButton.isSelected())
                 {
-                    maleRadioButton.setText("");
+                    btnsGroup.clearSelection();
                 }
                 else{
                     if(femaleRadioButton.isSelected()){
-                        femaleRadioButton.setText("");
+                        btnsGroup.clearSelection();
                     }
                 }
    
@@ -182,7 +182,7 @@ public class CrecheKiddie extends JFrame{
                 String childDetails = "";
                 for(Child elements: list){
                     if(elements instanceof Child){
-                        childDetails += "Name: "+elements.getName()+"\n"+"Gender: "+elements.getGender();
+                        childDetails += "Name: "+elements.getName()+"\n"+"Gender: "+elements.getGender()+"\n\n";
                     }
 
                 }
