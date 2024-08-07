@@ -1,6 +1,10 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -12,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class CrecheKiddie extends JFrame {
+public class CrecheKiddie extends JFrame{
     
     // panels
     private JPanel namePanel; 
@@ -45,12 +49,18 @@ public class CrecheKiddie extends JFrame {
     // scroll panel
     private JScrollPane scrollPane;
 
+    //ArrayList
+    private ArrayList<Child> kidList;
+
     public CrecheKiddie() {
         super("CRECHE 4 YOUR KIDDIE");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 200);
         setResizable(true);
         setDefaultLookAndFeelDecorated(true);
+
+        //create list for kids
+        kidList = new ArrayList<Child>();
 
         // initialize mainPanel
         mainPanel = new JPanel(new BorderLayout());
@@ -60,7 +70,7 @@ public class CrecheKiddie extends JFrame {
         genderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         textAreaPanel = new JPanel(new BorderLayout());
-        registerKiddiesPanel = new JPanel(new GridLayout(2, 1, 2, 5));
+        registerKiddiesPanel = new JPanel(new GridLayout(2, 1, 2, 3));
         nameGenderCombinedPanel = new JPanel(new BorderLayout());
 
         // create name label and text field
@@ -77,11 +87,16 @@ public class CrecheKiddie extends JFrame {
 
         // create buttons
         registerButton = new JButton("Register kiddie");
+        //add action listener for register button
+        registerButton.addActionListener(new RegBtnListener());
+
+        //add action listener for display button
         displayButton = new JButton("Display kiddies");
+        displayButton.addActionListener(new DisplayButtonListener());
 
         // create the text area
         textArea = new JTextArea(10, 30);
-        textArea.setEditable(false);  // Set text area as non-editable if necessary
+        textArea.setEditable(false);  
 
         // create scroll pane
         scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -105,7 +120,7 @@ public class CrecheKiddie extends JFrame {
         // add panels to registerKiddiesPanel
         registerKiddiesPanel.add(namePanel);
         registerKiddiesPanel.add(genderPanel);
-
+        
         // add panels to nameGenderCombinedPanel
         nameGenderCombinedPanel.add(registerKiddiesPanel, BorderLayout.NORTH);
 
@@ -120,4 +135,65 @@ public class CrecheKiddie extends JFrame {
         pack();
         setVisible(true);
     }
-}
+    //RegisterButtonListener class
+    private class RegBtnListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String name = namTextField.getText();
+            String gender;
+            if(maleRadioButton.isSelected())
+            {
+                gender = maleRadioButton.getText();
+            }
+            else
+                if(femaleRadioButton.isSelected());
+                {
+                    gender = femaleRadioButton.getText();
+                }
+                
+                //create child object
+                Child theChild = new Child(name,gender);
+                kidList.add(theChild);
+
+                //clear the input components after storage
+                namTextField.setText("");
+                if(maleRadioButton.isSelected())
+                {
+                    maleRadioButton.setText("");
+                }
+                else{
+                    if(femaleRadioButton.isSelected()){
+                        femaleRadioButton.setText("");
+                    }
+                }
+   
+                }        
+        }
+        private class DisplayButtonListener implements ActionListener{
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String details = toStr(kidList);
+                textArea.setText(details);
+                
+            }
+            public String toStr(ArrayList<Child> list){
+                String childDetails = "";
+                for(Child elements: list){
+                    if(elements instanceof Child){
+                        childDetails += "Name: "+elements.getName()+"\n"+"Gender: "+elements.getGender();
+                    }
+
+                }
+                
+                return childDetails;
+
+            }
+        }
+    }
+    
+
+    
+    
+
